@@ -143,7 +143,7 @@ async def start(client, message):
 
 def make_keyboard():
     buttons = [
-        [InlineKeyboardButton(value,f"mv {user_id} {key})"] for key, value in enumerate(movie_list)
+        InlineKeyboardButton(value,f"mv {user_id} {key}") for key, value in enumerate(movie_list)
     ]
     buttons.append([InlineKeyboardButton('Close the List ', callback_data='close_data')])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
