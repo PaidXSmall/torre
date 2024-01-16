@@ -1,0 +1,9 @@
+pyrogram==2.0.66
+TgCrypto==1.2.5 
+motor==3.1.2
+requests
+regex
+bs4
+pybase64
+aiogram
+lxml
