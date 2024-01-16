@@ -141,7 +141,7 @@ async def start(client, message):
     await asyncio.sleep(50)
     await hi.delete()
 
-def make_keyboard():
+def make_keyboard(user_id):
     buttons = [
         InlineKeyboardButton(value,f"mv {user_id} {key}") for key, value in enumerate(movie_list)
     ]
