@@ -206,27 +206,20 @@ def tamilmv():
             if i['href'].startswith('magnet'):
                 mag.append(i['href'])
                 
-        for a in soup.findAll('a',{"data-fileext":"torrent",'href':True}):
+        for a in soup.findAll('a', {"data-fileext": "torrent", 'href': True}):
             filelink.append(a['href'])
+            alltitles.append(a.text)
 
-        for title in bigtitle:
-            if title.find('span') == None:
-                pass
-            else:
-                if title.find('span').text.endswith('torrent'):
-                    alltitles.append(title.find('span'))
 
-        #chat_id = "RECIPIENT_CHAT_ID"
-        for p in range(0, len(mag)):
+        for p in range(0,len(filelink)):
+#             #print(f"*{alltitles[p]}* -->\n🧲 `{mag[p]}`\n🗒️->[Torrent file]({filelink[p]})")
             try:
-                real_dict.setdefault(movie_list[num], [])
-                entry = f"<b>{alltitles[p]}\n\n<code>{mag[p]}</code>\n\n{filelink[p]}</b>"
-                #reply_document()
-                real_dict[movie_list[num]].append(entry)
-            except Exception as e:
-                print(f"An error occurred: {e}")
-        
-        
+              real_dict.setdefault(movie_list[num],[])
+              real_dict[movie_list[num]].append({"Title": alltitles[p], "TorrentFile": filelink[p]})
+              #real_dict[movie_list[num]].append((f"*{alltitles[p]}* -->\n🧲 `{mag[p]}`\n🗒️->[Torrent file]({filelink[p]})"))
+            except:
+              pass
+            
         num = num + 1
 
 print("hari bot start💥")
