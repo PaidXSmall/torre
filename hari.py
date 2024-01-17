@@ -209,6 +209,19 @@ def tamilmv():
         for a in soup.findAll('a', {"data-fileext": "torrent", 'href': True}):
             filelink.append(a['href'])
             alltitles.append(a.text)
+            
+        for key , value in enumerate(movie_list):
+        if data == f"{key}":
+            if movie_list[int(data)] in real_dict.keys():
+                for file_data in real_dict[movie_list[int(data)]]:
+                    LOGGER.info(f"{file_data}")
+                    title = file_data["Title"]
+                    torrent_file_url = file_data["TorrentFile"]
+                    
+                    # Download the torrent file
+                    response = requests.get(torrent_file_url)
+                    file_name = f"{title}.torrent"
+                    query.bot.send_document(chat_id=msg.chat_id, document=response.content, filename=file_name, caption=title + "\n\nPGV_da")
 
 
         for p in range(0,len(filelink)):
