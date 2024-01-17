@@ -152,9 +152,9 @@ def make_keyboard():
 
 #@app.on_message()
 def tamilmv():
-    mainUrl = 'https://www.1tamilmv.im/'
+    mainUrl = 'https://www.1tamilmv.prof/'
     mainlink = []
-
+    
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
         'sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
@@ -162,7 +162,7 @@ def tamilmv():
         'Connection':'Keep-alive',
         'sec-ch-ua-platform': '"Windows"',
     }
-
+    
     global movie_dict 
     movie_dict = {}
     global real_dict
@@ -180,7 +180,7 @@ def tamilmv():
     
     temps = soup.find_all('div',{'class' : 'ipsType_break ipsContained'})
 
-    for i in range(12):
+    for i in range(21):
         title = temps[i].findAll('a')[0].text
         badtitles.append(title)
         links = temps[i].find('a')['href']
@@ -190,7 +190,7 @@ def tamilmv():
     for element in badtitles:
         realtitles.append(element.strip())
         movie_dict[element.strip()] = None
-    print(badtitles)
+    #print(badtitles)
     movie_list = list(movie_dict)
         
     for url in linker:
@@ -209,19 +209,6 @@ def tamilmv():
         for a in soup.findAll('a', {"data-fileext": "torrent", 'href': True}):
             filelink.append(a['href'])
             alltitles.append(a.text)
-            
-        for key , value in enumerate(movie_list):
-        if data == f"{key}":
-            if movie_list[int(data)] in real_dict.keys():
-                for file_data in real_dict[movie_list[int(data)]]:
-                    LOGGER.info(f"{file_data}")
-                    title = file_data["Title"]
-                    torrent_file_url = file_data["TorrentFile"]
-                    
-                    # Download the torrent file
-                    response = requests.get(torrent_file_url)
-                    file_name = f"{title}.torrent"
-                    query.bot.send_document(chat_id=msg.chat_id, document=response.content, filename=file_name, caption=title + "\n\nPGV_da")
 
 
         for p in range(0,len(filelink)):
@@ -234,6 +221,51 @@ def tamilmv():
               pass
             
         num = num + 1
+        
+def select_mv(update, context):
+    query = update.callback_query
+    user_id = query.from_user.id
+    data = query.data
+    #print("data : ", data)
+    msg = query.message
+    data = data.split(" ")
+    uid = int(data[1])
+    data = data[2]
+    global movie_list
+    global real_dict
+    '''
+    try:
+        task_info = listener_dict[task_id]
+    except:
+        return editMessage("This is an old task", msg)
+    
+    uid = task_info[0]
+    u_name = task_info[1]
+    '''
+    
+    if user_id != uid and not CustomFilters._owner_query(user_id):
+        return query.answer(text="This task is not for you!", show_alert=True)
+    #print("data1 : ", data)
+    #print("Movie Dict : " , movie_list)
+    #sendMessage(f"<b>Here's your Movie links 🎥</b>", query.bot, msg)
+    if data == "cancel":
+        query.answer()
+        editMessage('🥰', msg)
+    for key , value in enumerate(movie_list):
+        if data == f"{key}":
+            if movie_list[int(data)] in real_dict.keys():
+                for file_data in real_dict[movie_list[int(data)]]:
+                    LOGGER.info(f"{file_data}")
+                    title = file_data["Title"]
+                    torrent_file_url = file_data["TorrentFile"]
+                    
+                    # Download the torrent file
+                    response = requests.get(torrent_file_url)
+                    file_name = f"{title}.torrent"
+                    query.bot.send_document(chat_id=msg.chat_id, document=response.content, filename=file_name, caption=title + "\n\nPGV_da")
+                    
+            else:
+                sendMessage(f"<b>Torrent Files Not Available</b>", query.bot, msg)
 
 print("hari bot start💥")
 
